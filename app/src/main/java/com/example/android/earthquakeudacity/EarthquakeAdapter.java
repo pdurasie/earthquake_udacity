@@ -117,7 +117,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         if (initialLocation.contains("km") && initialLocation.contains("of")){
             //(?<=) is called a positive lookaround in regular expressions
             //it makes the "of" be included in the split string
-            String [] splitString = initialLocation.split("(?<=of)");
+            String [] splitString = initialLocation.split("(?<=of )");
             nearTextView.setText(splitString[0]);
             locationTextView.setText(splitString[1]);
         } else{
