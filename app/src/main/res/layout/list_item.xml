@@ -7,10 +7,21 @@
 
     <TextView
         android:id="@+id/mag_text_view"
-        style="@style/general_list_item"
-        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/magnitude_circle"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         tools:text="7,2"
         />
+
+    <TextView
+        android:id="@+id/near_text_view"
+        style="@style/general_list_item"
+        tools:text="88km N of"/>
 
     <TextView
         android:id="@+id/location_text_view"
