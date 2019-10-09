@@ -53,9 +53,10 @@ public final class QueryUtils {
                 double mag = earthquakeProperties.getDouble("mag");
                 String place = earthquakeProperties.getString("place");
                 long time = earthquakeProperties.getLong("time");
+                String url = earthquakeProperties.getString("url");
 
                 //add new earthquake object to ArrayList
-                earthquakes.add(new Earthquake(mag, place, time));
+                earthquakes.add(new Earthquake(mag, place, time, url));
             }
 
         } catch (JSONException e) {
