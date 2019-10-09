@@ -22,5 +22,10 @@
         style="@style/general_list_item"
         tools:text="Feb 2, 2016"/>
 
+    <TextView
+        android:id="@+id/time_text_view"
+        style="@style/general_list_item"
+        tools:text="3:00 PM"/>
+
 
 </LinearLayout>
