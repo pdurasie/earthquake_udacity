@@ -1,3 +1,8 @@
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
 <ListView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list"
     android:orientation="vertical"
@@ -5,3 +10,13 @@
     android:layout_height="match_parent"
     android:divider="@null"
     android:dividerHeight="0dp"/>
+
+<TextView
+    android:id="@+id/empty_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    />
+
+
+</RelativeLayout>

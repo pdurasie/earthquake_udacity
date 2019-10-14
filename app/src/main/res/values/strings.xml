@@ -2,4 +2,5 @@
     <string name="app_name">EarthquakeUdacity</string>
     <string name="of">of</string>
     <string name="near_of">Near of</string>
+    <string name="empty_view">No earthquakes found.</string>
 </resources>

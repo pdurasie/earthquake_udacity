@@ -1,7 +1,5 @@
 package com.example.android.earthquakeudacity;
 
-
-
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
@@ -10,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,13 +21,18 @@ public class EarthquakeActivity extends AppCompatActivity
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
     private EarthquakeAdapter mAdapter;
+    private ListView earthquakeListView;
+    private TextView emptyView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        final ListView earthquakeListView = findViewById(R.id.list);
+        earthquakeListView = findViewById(R.id.list);
+        emptyView = findViewById(R.id.empty_view);
+        earthquakeListView.setEmptyView(emptyView);
+
         // Create a new {@link ArrayAdapter} of earthquakes
         mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
@@ -60,9 +64,10 @@ public class EarthquakeActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(@NonNull Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
         mAdapter.clear();
-        if(earthquakes != null && !earthquakes.isEmpty()){
+        if (earthquakes != null && !earthquakes.isEmpty()) {
             mAdapter.addAll(earthquakes);
         }
+        emptyView.setText(R.string.empty_view);
     }
 
     @Override
