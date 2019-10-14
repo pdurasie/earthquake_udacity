@@ -1,6 +1,10 @@
 package com.example.android.earthquakeudacity;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -32,6 +36,7 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
     private EarthquakeAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +76,11 @@ public class EarthquakeActivity extends AppCompatActivity {
         @Override
         protected List<Earthquake> doInBackground(String... strings) {
 
-            URL url = createUrl(QueryUtils.SAMPLE_JSON_RESPONSE);
+            URL url = QueryUtils.createUrl(QueryUtils.SAMPLE_JSON_RESPONSE);
             String jsonResponse = "";
 
             try {
-                jsonResponse = makeHttpRequest(url);
+                jsonResponse = QueryUtils.makeHttpRequest(url);
             } catch (IOException e){
                 Log.e(LOG_TAG, "IOException thrown", e);
             }
@@ -87,63 +92,6 @@ public class EarthquakeActivity extends AppCompatActivity {
             updateUi(earthquakes);
         }
 
-        private URL createUrl(String stringUrl){
-            URL url = null;
-            try {
-                url = new URL(stringUrl);
-            } catch (MalformedURLException e) {
-                Log.e(LOG_TAG, "IOException thrown", e);
-            }
-            return url;
-        }
 
-        private String makeHttpRequest(URL url) throws IOException{
-            String jsonResponse = "";
-            if(url == null){
-                return jsonResponse;
-            }
-
-            HttpURLConnection urlConnection = null;
-            InputStream inputStream = null;
-            try{
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.setReadTimeout(10000);
-                urlConnection.setConnectTimeout(15000);
-                urlConnection.connect();
-                if(urlConnection.getResponseCode() == 200){
-                    inputStream = urlConnection.getInputStream();
-                    jsonResponse = readFromStream(inputStream);
-                }else{
-                    Log.e(LOG_TAG, "Response code is not 200" );
-                }
-            }catch (IOException e){
-                Log.e(LOG_TAG, "IOException thrown", e);
-            } finally{
-                //close everything if they existed
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if(inputStream != null){
-                    inputStream.close();
-                }
-            }
-            return jsonResponse;
-        }
-
-        private String readFromStream(InputStream inputStream) throws IOException{
-            StringBuilder output = new StringBuilder();
-            if (inputStream != null){
-                InputStreamReader streamReader =
-                        new InputStreamReader(inputStream, Charset.forName("UTF-8"));
-                BufferedReader reader = new BufferedReader(streamReader);
-                String line = reader.readLine();
-                while(line != null){
-                    output.append(line);
-                    line = reader.readLine();
-                }
-            }
-            return output.toString();
-        }
     }
 }
