@@ -1,38 +1,24 @@
 package com.example.android.earthquakeudacity;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 
+
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.Buffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EarthquakeActivity extends AppCompatActivity {
+public class EarthquakeActivity extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<List<Earthquake>> {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
     private EarthquakeAdapter mAdapter;
@@ -50,8 +36,8 @@ public class EarthquakeActivity extends AppCompatActivity {
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(mAdapter);
 
-        EarthquakeAsyncTask task = new EarthquakeAsyncTask();
-        task.execute();
+        android.app.LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(1, null, this);
 
         earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -65,33 +51,23 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     }
 
-    private void updateUi(List<Earthquake> earthquakes){
+    @Override
+    public Loader<List<Earthquake>> onCreateLoader(int i, Bundle bundle) {
+        // Create a new loader for the given URL
+        return new EarthquakeLoader(this, QueryUtils.SAMPLE_JSON_RESPONSE);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
         mAdapter.clear();
         if(earthquakes != null && !earthquakes.isEmpty()){
             mAdapter.addAll(earthquakes);
         }
     }
 
-    private class EarthquakeAsyncTask extends AsyncTask<String, Void, List<Earthquake>> {
-        @Override
-        protected List<Earthquake> doInBackground(String... strings) {
-
-            URL url = QueryUtils.createUrl(QueryUtils.SAMPLE_JSON_RESPONSE);
-            String jsonResponse = "";
-
-            try {
-                jsonResponse = QueryUtils.makeHttpRequest(url);
-            } catch (IOException e){
-                Log.e(LOG_TAG, "IOException thrown", e);
-            }
-            return QueryUtils.extractEarthquakes(jsonResponse);
-        }
-
-        @Override
-        protected void onPostExecute(List<Earthquake> earthquakes) {
-            updateUi(earthquakes);
-        }
-
-
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Earthquake>> loader) {
+        mAdapter.clear();
     }
+
 }
